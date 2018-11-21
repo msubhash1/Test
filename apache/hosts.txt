@@ -1,0 +1,2 @@
+[example.com]
+MSR-test-instance-1

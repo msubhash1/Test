@@ -1,0 +1,9 @@
+---
+- hosts: example.com
+  become: yes
+  tasks:
+    - docker_service:
+        project_src: compose
+        register: output
+    - debug:
+        msg: {{ output }}
