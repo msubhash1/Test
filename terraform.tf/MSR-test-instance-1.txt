@@ -1,0 +1,36 @@
+provider "aws" {
+access_key=""
+secret_key=""
+region="us-east-2"
+}
+resource "aws_key_pair" "instance1" {
+key_name="instance1"
+public_key="${file("/home/ubuntu/.ssh/id_rsa.pub")}"
+}
+resource "aws_security_group" "instance1" {
+name="instance1"
+
+   ingress {
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+   }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+}
+resource "aws_instance" "MSR-test-instance-1" {
+count=1
+instance_type="t2.micro"
+ami="ami-0552e3455b9bc8d50"
+key_name="${aws_key_pair.instance1.key_name}"
+security_groups=["${aws_security_group.instance1.name}"]
+  tags{
+   Name = "MSR-test-instance-1"
+  }
+}
